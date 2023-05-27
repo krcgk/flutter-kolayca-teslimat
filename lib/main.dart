@@ -19,8 +19,49 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
+
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int myCounter = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('My App Bar'),
+      ),
+      body: buildBody(),
+    );
+  }
+
+  Widget buildBody() {
+    return Container(
+      child: Column(
+        children: [
+          Text(
+            'My Counter: ' + myCounter.toString(),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                myCounter = myCounter + 1;
+              });
+            },
+            child: Text('Arttir'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class FirstVersionOfMyHomePage extends StatelessWidget {
+  const FirstVersionOfMyHomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
