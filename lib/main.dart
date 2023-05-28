@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:kolaycateslimat/models/package_model.dart';
 import 'package:kolaycateslimat/pages/home_page.dart';
 import 'package:kolaycateslimat/pages/login_page.dart';
+import 'package:kolaycateslimat/pages/package_page.dart';
+import 'package:kolaycateslimat/pages/splash_page.dart';
 import 'package:kolaycateslimat/pages/waiting_packages_page.dart';
+import 'package:kolaycateslimat/routes.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +21,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.brown,
       ),
-      home: MyHomePage(),
+      home: const SplashPage(),
+      onGenerateRoute: Routes().onGenerateRoute,
     );
   }
 }

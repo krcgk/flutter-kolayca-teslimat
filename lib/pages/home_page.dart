@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kolaycateslimat/widgets/my_custom_drawer.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -16,7 +17,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text('Kolayca Teslimat'),
       ),
-      drawer: buildDrawer(),
+      drawer: MyCustomDrawer(),
       body: buildBody(),
     );
   }
@@ -35,39 +36,6 @@ class _MyHomePageState extends State<MyHomePage> {
               });
             },
             child: Text('Arttir'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget buildDrawer() {
-    return Drawer(
-      child: ListView(
-        children: [
-          DrawerHeader(
-            child: Text('Kolayca Teslimat'),
-            decoration: BoxDecoration(
-              color: Colors.brown,
-            ),
-          ),
-          ListTile(
-            title: Text('Rota Haritasi'),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            title: Text('Bekleyen Paketler'),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            title: Text('Cikis Yap'),
-            onTap: () {
-              Navigator.pop(context);
-            },
           ),
         ],
       ),

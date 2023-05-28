@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kolaycateslimat/routes.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -27,17 +28,13 @@ class _LoginPageState extends State<LoginPage> {
       loginIsStarted = true;
     });
 
-    Future.delayed(Duration(seconds: 2), () {
+    Future.delayed(Duration(seconds: 1), () {
       setState(() {
         loginIsStarted = false;
       });
 
       if (_phoneNumberController.text == '123456') {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Bilgileriniz Dogru.'),
-          ),
-        );
+        Navigator.of(context).pushReplacementNamed(Routes.home);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
