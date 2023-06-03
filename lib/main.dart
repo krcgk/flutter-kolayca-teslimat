@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kolaycateslimat/injector.dart' as injector;
 import 'package:kolaycateslimat/models/package_model.dart';
 import 'package:kolaycateslimat/pages/home_page.dart';
 import 'package:kolaycateslimat/pages/login_page.dart';
@@ -7,7 +8,9 @@ import 'package:kolaycateslimat/pages/splash_page.dart';
 import 'package:kolaycateslimat/pages/waiting_packages_page.dart';
 import 'package:kolaycateslimat/routes.dart';
 
-void main() {
+void main() async {
+  await injector.init();
+
   runApp(const MyApp());
 }
 

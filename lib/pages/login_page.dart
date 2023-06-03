@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:kolaycateslimat/injector.dart' as injector;
+import 'package:kolaycateslimat/pages/example_service.dart';
 import 'package:kolaycateslimat/routes.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -7,9 +10,18 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final ExampleService _exampleService = injector.serviceLocator.get<ExampleService>();
   final TextEditingController _phoneNumberController = new TextEditingController();
 
   bool loginIsStarted = false;
+
+  @override
+  void initState() {
+    super.initState();
+    SharedPreferences.getInstance().then((SharedPreferences sharedPreferences) {
+      _phoneNumberController.text = sharedPreferences.getString('phoneNumber') ?? '';
+    });
+  }
 
   void attemptLogin() {
     if (_phoneNumberController.text.isEmpty) {
@@ -33,6 +45,10 @@ class _LoginPageState extends State<LoginPage> {
         loginIsStarted = false;
       });
 
+      SharedPreferences.getInstance().then((SharedPreferences sharedPreferences) {
+        sharedPreferences.setString('phoneNumber', _phoneNumberController.text);
+      });
+
       if (_phoneNumberController.text == '123456') {
         Navigator.of(context).pushReplacementNamed(Routes.home);
       } else {
@@ -42,6 +58,8 @@ class _LoginPageState extends State<LoginPage> {
           ),
         );
       }
+    }).catchError((err) {
+      print(err);
     });
   }
 
@@ -59,6 +77,15 @@ class _LoginPageState extends State<LoginPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Hero(
+            tag: 'logo',
+            child: Icon(
+              Icons.local_shipping,
+              size: 100,
+              color: Colors.brown,
+            ),
+          ),
+          //
           buildPhoneNumber(),
           //
           buildLoginButton()
