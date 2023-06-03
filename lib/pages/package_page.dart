@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kolaycateslimat/models/package_model.dart';
 import 'package:kolaycateslimat/routes.dart';
+import 'package:provider/provider.dart';
 
 class PackagePage extends StatefulWidget {
   PackagePage({
@@ -23,6 +24,11 @@ class _PackagePageState extends State<PackagePage> {
         package = ModalRoute.of(context)!.settings.arguments as Package;
       });
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
   }
 
   @override

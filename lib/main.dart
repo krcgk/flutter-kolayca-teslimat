@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:kolaycateslimat/injector.dart' as injector;
-import 'package:kolaycateslimat/models/package_model.dart';
-import 'package:kolaycateslimat/pages/home_page.dart';
-import 'package:kolaycateslimat/pages/login_page.dart';
-import 'package:kolaycateslimat/pages/package_page.dart';
 import 'package:kolaycateslimat/pages/splash_page.dart';
-import 'package:kolaycateslimat/pages/waiting_packages_page.dart';
 import 'package:kolaycateslimat/routes.dart';
+import 'package:kolaycateslimat/stores/root_store.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   await injector.init();
 
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        Provider.value(value: injector.serviceLocator.get<RootStore>()),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -19,13 +24,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.brown,
-      ),
-      home: const SplashPage(),
-      onGenerateRoute: Routes().onGenerateRoute,
-    );
+    return Observer(builder: (context) {
+      return MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primaryColor: injector.serviceLocator.get<RootStore>().themeStore.primaryColor,
+          appBarTheme: AppBarTheme(
+            backgroundColor: injector.serviceLocator.get<RootStore>().themeStore.primaryColor,
+          ),
+        ),
+        home: const SplashPage(),
+        onGenerateRoute: Routes().onGenerateRoute,
+      );
+    });
   }
 }
