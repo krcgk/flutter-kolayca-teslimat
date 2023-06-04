@@ -24,4 +24,17 @@ class PackageService {
       rethrow;
     }
   }
+
+  Future<PackageModel> moveToCar(int packageId) async {
+    try {
+      var response = await dio.put(
+        'https://flutter.gokhankaraca.com/api/packages/show/$packageId/move-to-car',
+      );
+
+      return PackageModel.fromJson(response.data['package']);
+    } catch (err) {
+      print(err);
+      rethrow;
+    }
+  }
 }

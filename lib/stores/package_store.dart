@@ -35,6 +35,15 @@ abstract class _PackageStore with Store {
   }
 
   @action
+  Future<void> moveToCar() async {
+    PackageModel newPackage = await packageService.moveToCar(package!.id);
+
+    int indexOf = packages.indexOf(package!);
+
+    packages[indexOf] = newPackage;
+  }
+
+  @action
   void choosePackage(PackageModel _package) {
     choosedPackageId = _package.id;
   }

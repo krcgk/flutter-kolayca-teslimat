@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:kolaycateslimat/models/package_model.dart';
 import 'package:kolaycateslimat/routes.dart';
+import 'package:kolaycateslimat/stores/auth_store.dart';
 import 'package:kolaycateslimat/stores/package_store.dart';
 import 'package:kolaycateslimat/stores/root_store.dart';
+import 'package:kolaycateslimat/widgets/take_photo_page.dart';
 import 'package:provider/provider.dart';
 
 class PackagePage extends StatefulWidget {
@@ -17,6 +19,7 @@ class PackagePage extends StatefulWidget {
 
 class _PackagePageState extends State<PackagePage> {
   late RootStore _rootStore;
+  late AuthStore _authStore;
   late PackageStore _packageStore;
 
   @override
@@ -29,6 +32,7 @@ class _PackagePageState extends State<PackagePage> {
     super.didChangeDependencies();
 
     _rootStore = Provider.of<RootStore>(context);
+    _authStore = _rootStore.authStore;
     _packageStore = _rootStore.packageStore;
   }
 
@@ -39,13 +43,14 @@ class _PackagePageState extends State<PackagePage> {
         title: Text('Paket Detayı'),
       ),
       body: buildBody(),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.home),
-        onPressed: () {
-          Navigator.of(context).popUntil((route) => route.isFirst);
-          // Navigator.of(context).pushNamedAndRemoveUntil(Routes.home, (route) => false);
-        },
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   child: Icon(Icons.home),
+      //   onPressed: () async {
+      //     // await _packageStore.fetchPackages();
+      //     // Navigator.of(context).popUntil((route) => route.isFirst);
+      //     // Navigator.of(context).pushNamedAndRemoveUntil(Routes.home, (route) => false);
+      //   },
+      // ),
     );
   }
 
@@ -58,9 +63,11 @@ class _PackagePageState extends State<PackagePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(_packageStore.package?.price.toString() ?? ''),
-              Text(_packageStore.package?.sender.firstName ?? ''),
-              Text(_packageStore.package?.receiver.firstName ?? ''),
+              buildBasicInfo(),
+              buildReceiverInfo(),
+              buildSenderInfo(),
+              buildMoveToCar(),
+              buildComplete(),
               // SizedBox(height: 20),
               // Text(
               //   'Paket ID: ${this.package?.id}',
@@ -96,6 +103,160 @@ class _PackagePageState extends State<PackagePage> {
           ),
         ),
       );
+    });
+  }
+
+  Widget buildBasicInfo() {
+    return Observer(builder: (BuildContext context) {
+      return Container(
+        width: double.infinity,
+        margin: EdgeInsets.all(15),
+        padding: EdgeInsets.all(15),
+        decoration: BoxDecoration(
+          color: Colors.grey.withOpacity(0.5),
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  _packageStore.package?.status ?? '',
+                  style: TextStyle(fontSize: 24),
+                ),
+                Text(
+                  '#' + (_packageStore.package?.id.toString() ?? ''),
+                  style: TextStyle(fontSize: 24),
+                ),
+              ],
+            ),
+            Text(
+              _packageStore.package?.typeName ?? '',
+              style: TextStyle(fontSize: 16),
+            ),
+            Text('₺' + (_packageStore.package?.price.toString() ?? '')),
+          ],
+        ),
+      );
+    });
+  }
+
+  Widget buildSenderInfo() {
+    return Observer(builder: (BuildContext context) {
+      return Container(
+        width: double.infinity,
+        margin: EdgeInsets.all(15),
+        padding: EdgeInsets.all(15),
+        decoration: BoxDecoration(
+          color: Colors.grey.withOpacity(0.5),
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Gönderici',
+              style: TextStyle(fontSize: 24),
+            ),
+            Text(
+              (_packageStore.package?.sender.firstName ?? '') + ' ' + (_packageStore.package?.sender.lastName ?? ''),
+              style: TextStyle(fontSize: 16),
+            ),
+            Text(
+              (_packageStore.package?.sender.phoneNumber ?? ''),
+              style: TextStyle(fontSize: 16),
+            ),
+            Text(
+              "${_packageStore.package?.sender.address}, ${_packageStore.package?.sender.district}, ${_packageStore.package?.sender.city}",
+              style: TextStyle(fontSize: 16),
+            ),
+            Text(
+              (_packageStore.package?.sender.postalCode ?? ''),
+              style: TextStyle(fontSize: 16),
+            ),
+          ],
+        ),
+      );
+    });
+  }
+
+  Widget buildReceiverInfo() {
+    return Observer(builder: (BuildContext context) {
+      return Container(
+        width: double.infinity,
+        margin: EdgeInsets.all(15),
+        padding: EdgeInsets.all(15),
+        decoration: BoxDecoration(
+          color: Colors.grey.withOpacity(0.5),
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Alıcı',
+              style: TextStyle(fontSize: 24),
+            ),
+            Text(
+              (_packageStore.package?.receiver.firstName ?? '') + ' ' + (_packageStore.package?.receiver.lastName ?? ''),
+              style: TextStyle(fontSize: 16),
+            ),
+            Text(
+              (_packageStore.package?.receiver.phoneNumber ?? ''),
+              style: TextStyle(fontSize: 16),
+            ),
+            Text(
+              "${_packageStore.package?.receiver.address}, ${_packageStore.package?.receiver.district}, ${_packageStore.package?.receiver.city}",
+              style: TextStyle(fontSize: 16),
+            ),
+            Text(
+              (_packageStore.package?.receiver.postalCode ?? ''),
+              style: TextStyle(fontSize: 16),
+            ),
+          ],
+        ),
+      );
+    });
+  }
+
+  Widget buildMoveToCar() {
+    return Observer(builder: (BuildContext context) {
+      if (_packageStore.package?.status == 'Bekleniyor' &&
+          (_packageStore.package?.responsibleUserId == null || _packageStore.package?.responsibleUserId == _authStore.user?.id)) {
+        return Container(
+          child: ElevatedButton(
+            child: Text('Araca Taşı'),
+            onPressed: () async {
+              await _packageStore.moveToCar();
+            },
+          ),
+        );
+      }
+
+      return SizedBox.shrink();
+    });
+  }
+
+  Widget buildComplete() {
+    return Observer(builder: (BuildContext context) {
+      if (_packageStore.package?.status == 'Araçta' && _packageStore.package?.responsibleUserId == _authStore.user?.id) {
+        return Container(
+          child: ElevatedButton(
+            child: Text('Teslim Et'),
+            onPressed: () async {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (BuildContext context) => TakePhotoPage(),
+                ),
+              );
+            },
+          ),
+        );
+      }
+
+      return SizedBox.shrink();
     });
   }
 }
