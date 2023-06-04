@@ -31,19 +31,16 @@ mixin _$AuthStore on _AuthStore, Store {
     });
   }
 
-  late final _$_AuthStoreActionController =
-      ActionController(name: '_AuthStore', context: context);
+  late final _$loginAsyncAction =
+      AsyncAction('_AuthStore.login', context: context);
 
   @override
-  void login(String _phoneNumber) {
-    final _$actionInfo =
-        _$_AuthStoreActionController.startAction(name: '_AuthStore.login');
-    try {
-      return super.login(_phoneNumber);
-    } finally {
-      _$_AuthStoreActionController.endAction(_$actionInfo);
-    }
+  Future<void> login(String _phoneNumber) {
+    return _$loginAsyncAction.run(() => super.login(_phoneNumber));
   }
+
+  late final _$_AuthStoreActionController =
+      ActionController(name: '_AuthStore', context: context);
 
   @override
   void logout() {

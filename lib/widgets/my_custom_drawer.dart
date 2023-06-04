@@ -35,7 +35,19 @@ class _MyCustomDrawerState extends State<MyCustomDrawer> {
           children: [
             Observer(builder: (context) {
               return DrawerHeader(
-                child: Text("Hoşgeldin, ${_authStore.user?.firstName ?? ''}"),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "${_authStore.user?.firstName ?? ''} ${_authStore.user?.lastName ?? ''}",
+                      style: TextStyle(
+                        fontSize: 24,
+                      ),
+                    ),
+                    Text("Kazancın: ₺ ${_authStore.user?.balanceAmount ?? ''}"),
+                  ],
+                ),
                 decoration: BoxDecoration(
                   color: _themeStore.primaryColor,
                 ),
@@ -59,8 +71,8 @@ class _MyCustomDrawerState extends State<MyCustomDrawer> {
               title: Text('Cikis Yap'),
               onTap: () {
                 _authStore.logout();
-                // Navigator.pop(context);
-                // Navigator.of(context).pushReplacementNamed(Routes.login);
+                Navigator.pop(context);
+                Navigator.of(context).pushReplacementNamed(Routes.login);
               },
             ),
           ],

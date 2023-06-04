@@ -1,4 +1,6 @@
+import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:kolaycateslimat/network/auth_service.dart';
 import 'package:kolaycateslimat/pages/example_service.dart';
 import 'package:kolaycateslimat/stores/auth_store.dart';
 import 'package:kolaycateslimat/stores/counter.dart';
@@ -10,9 +12,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 GetIt serviceLocator = GetIt.instance;
 
 Future<void> init() async {
+  serviceLocator.registerLazySingleton(() => Dio());
   serviceLocator.registerLazySingleton(() => ExampleService());
 
   // serviceLocator.registerLazySingleton(() => Counter());
+
+  serviceLocator.registerLazySingleton(() => AuthService(serviceLocator.get<Dio>()));
 
   serviceLocator.registerFactory(() => AuthStore());
   serviceLocator.registerFactory(() => ThemeStore());

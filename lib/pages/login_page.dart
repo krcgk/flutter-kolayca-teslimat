@@ -55,8 +55,8 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  void startLogin() {
-    _authStore.login(_phoneNumberController.text);
+  Future<void> startLogin() async {
+    await _authStore.login(_phoneNumberController.text);
 
     if (_authStore.isLoggedIn == true) {
       Navigator.of(context).pushReplacementNamed(Routes.home);

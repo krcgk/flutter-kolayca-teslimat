@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:kolaycateslimat/injector.dart' as injector;
 import 'package:kolaycateslimat/models/user_model.dart';
+import 'package:kolaycateslimat/network/auth_service.dart';
 import 'package:mobx/mobx.dart';
 
 part 'auth_store.g.dart';
@@ -7,6 +9,8 @@ part 'auth_store.g.dart';
 class AuthStore = _AuthStore with _$AuthStore;
 
 abstract class _AuthStore with Store {
+  final AuthService authService = injector.serviceLocator.get<AuthService>();
+
   @observable
   UserModel? user;
 
@@ -14,15 +18,13 @@ abstract class _AuthStore with Store {
   bool get isLoggedIn => user != null;
 
   @action
-  void login(String _phoneNumber) {
-    if (_phoneNumber == '123456') {
-      user = UserModel(
-        firstName: 'John',
-        lastName: 'Doe',
-        phoneNumber: _phoneNumber,
-      );
-    } else {
-      user = null;
+  Future<void> login(String _phoneNumber) async {
+    try {
+      UserModel _userModel = await authService.login(_phoneNumber);
+
+      user = _userModel;
+    } catch (err) {
+      throw Exception('Login failed');
     }
   }
 
