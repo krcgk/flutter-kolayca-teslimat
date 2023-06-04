@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:kolaycateslimat/network/auth_service.dart';
+import 'package:kolaycateslimat/network/package_service.dart';
 import 'package:kolaycateslimat/pages/example_service.dart';
 import 'package:kolaycateslimat/stores/auth_store.dart';
 import 'package:kolaycateslimat/stores/counter.dart';
@@ -17,7 +18,28 @@ Future<void> init() async {
 
   // serviceLocator.registerLazySingleton(() => Counter());
 
+  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+  Dio dio = serviceLocator.get<Dio>();
+
+  dio.interceptors.add(
+    InterceptorsWrapper(
+      onRequest: (RequestOptions options, RequestInterceptorHandler handler) {
+        // print(options.path);
+        if (sharedPreferences.containsKey('TOKEN')) {
+          //   print(sharedPreferences.getString('TOKEN'));
+          options.headers.putIfAbsent('Authorization', () => 'Bearer ${sharedPreferences.getString('TOKEN') ?? ''}');
+        }
+        // print(options.headers);
+        // print(options.data);
+
+        return handler.next(options);
+      },
+    ),
+  );
+
   serviceLocator.registerLazySingleton(() => AuthService(serviceLocator.get<Dio>()));
+  serviceLocator.registerLazySingleton(() => PackageService(serviceLocator.get<Dio>()));
 
   serviceLocator.registerFactory(() => AuthStore());
   serviceLocator.registerFactory(() => ThemeStore());

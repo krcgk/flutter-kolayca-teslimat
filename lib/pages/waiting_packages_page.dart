@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:kolaycateslimat/models/package_model.dart';
 import 'package:kolaycateslimat/routes.dart';
+import 'package:kolaycateslimat/stores/package_store.dart';
+import 'package:kolaycateslimat/stores/root_store.dart';
 import 'package:kolaycateslimat/widgets/my_custom_drawer.dart';
+import 'package:provider/provider.dart';
 
 class WaitingPackagesPage extends StatefulWidget {
   @override
@@ -9,80 +13,29 @@ class WaitingPackagesPage extends StatefulWidget {
 }
 
 class _WaitingPackagesPageState extends State<WaitingPackagesPage> {
-  List<Package> packages = [
-    Package(
-        id: '85121',
-        status: 'Depoda',
-        typeName: 'Standart Gönderim',
-        price: 15.50,
-        sender: 'Amazon',
-        receiver: 'Gökhan Karaca +905555555555'),
-    Package(
-        id: '78121',
-        status: 'Depoda',
-        typeName: 'Standart Gönderim',
-        price: 15.50,
-        sender: 'Amazon',
-        receiver: 'Gökhan Karaca +905555555555'),
-    Package(
-        id: '6121',
-        status: 'Depoda',
-        typeName: 'Standart Gönderim',
-        price: 15.50,
-        sender: 'Amazon',
-        receiver: 'Gökhan Karaca +905555555555'),
-    Package(
-        id: '1241',
-        status: 'Depoda',
-        typeName: 'Standart Gönderim',
-        price: 15.50,
-        sender: 'Amazon',
-        receiver: 'Gökhan Karaca +905555555555'),
-    Package(
-        id: '41231',
-        status: 'Depoda',
-        typeName: 'Standart Gönderim',
-        price: 15.50,
-        sender: 'Amazon',
-        receiver: 'Gökhan Karaca +905555555555'),
-    Package(
-        id: '7121',
-        status: 'Depoda',
-        typeName: 'Standart Gönderim',
-        price: 15.50,
-        sender: 'Amazon',
-        receiver: 'Gökhan Karaca +905555555555'),
-    Package(
-        id: '6241',
-        status: 'Depoda',
-        typeName: 'Standart Gönderim',
-        price: 15.50,
-        sender: 'Amazon',
-        receiver: 'Gökhan Karaca +905555555555'),
-    Package(
-        id: '112',
-        status: 'Depoda',
-        typeName: 'Standart Gönderim',
-        price: 15.50,
-        sender: 'Amazon',
-        receiver: 'Gökhan Karaca +905555555555'),
-    Package(
-        id: '1252',
-        status: 'Depoda',
-        typeName: 'Standart Gönderim',
-        price: 15.50,
-        sender: 'Amazon',
-        receiver: 'Gökhan Karaca +905555555555'),
-    Package(
-        id: '1521',
-        status: 'Depoda',
-        typeName: 'Standart Gönderim',
-        price: 15.50,
-        sender: 'Amazon',
-        receiver: 'Gökhan Karaca +905555555555'),
-  ];
+  late RootStore _rootStore;
+  late PackageStore _packageStore;
 
   int crossAxisCount = 1;
+
+  @override
+  void initState() {
+    super.initState();
+
+    () async {
+      await Future.delayed(Duration.zero);
+
+      await _packageStore.fetchPackages();
+    }();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    _rootStore = Provider.of<RootStore>(context);
+    _packageStore = _rootStore.packageStore;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -111,26 +64,35 @@ class _WaitingPackagesPageState extends State<WaitingPackagesPage> {
   }
 
   Widget buildBody() {
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      child: GridView.count(
-        crossAxisCount: crossAxisCount,
-        mainAxisSpacing: 20,
-        crossAxisSpacing: 20,
-        childAspectRatio: crossAxisCount > 1 ? 1 : 16 / 9,
-        padding: EdgeInsets.all(20),
-        children: packages.map((package) {
-          return buildPack(package);
-        }).toList(),
-      ),
-    );
+    return Observer(builder: (context) {
+      return Container(
+        width: double.infinity,
+        height: double.infinity,
+        child: RefreshIndicator(
+          backgroundColor: Colors.brown,
+          onRefresh: () async {
+            await _packageStore.fetchPackages();
+          },
+          child: GridView.count(
+            crossAxisCount: crossAxisCount,
+            mainAxisSpacing: 20,
+            crossAxisSpacing: 20,
+            childAspectRatio: crossAxisCount > 1 ? 1 : 16 / 9,
+            padding: EdgeInsets.all(20),
+            children: _packageStore.packages.map((package) {
+              return buildPackageContainer(package);
+            }).toList(),
+          ),
+        ),
+      );
+    });
   }
 
-  Widget buildPack(Package package) {
+  Widget buildPackageContainer(PackageModel package) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).pushNamed(Routes.package, arguments: package);
+        _packageStore.choosePackage(package);
+        Navigator.of(context).pushNamed(Routes.package);
       },
       child: Container(
         decoration: BoxDecoration(
@@ -144,6 +106,7 @@ class _WaitingPackagesPageState extends State<WaitingPackagesPage> {
             Text('Paket ID: ${package.id}'),
             Text('Tip: ${package.typeName}'),
             Text('Fiyat: ${package.price} TL'),
+            Text('Durum: ${package.status}'),
           ],
         ),
       ),

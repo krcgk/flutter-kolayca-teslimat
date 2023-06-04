@@ -20,7 +20,12 @@ class AuthService {
       print(response.data);
 
       return UserModel.fromJson(response.data['user']);
+    } on DioError catch (err) {
+      print(phoneNumber);
+      print(err.response?.data);
+      rethrow;
     } catch (err) {
+      print(phoneNumber);
       print(err);
       rethrow;
     }

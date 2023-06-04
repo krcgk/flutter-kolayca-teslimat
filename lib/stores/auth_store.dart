@@ -3,6 +3,7 @@ import 'package:kolaycateslimat/injector.dart' as injector;
 import 'package:kolaycateslimat/models/user_model.dart';
 import 'package:kolaycateslimat/network/auth_service.dart';
 import 'package:mobx/mobx.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'auth_store.g.dart';
 
@@ -22,8 +23,12 @@ abstract class _AuthStore with Store {
     try {
       UserModel _userModel = await authService.login(_phoneNumber);
 
+      SharedPreferences _sharedPreferences = await SharedPreferences.getInstance();
+      _sharedPreferences.setString('TOKEN', _userModel.token);
+
       user = _userModel;
     } catch (err) {
+      print(err);
       throw Exception('Login failed');
     }
   }

@@ -7,6 +7,8 @@ import 'package:kolaycateslimat/stores/root_store.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   await injector.init();
 
   runApp(
