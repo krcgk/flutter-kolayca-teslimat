@@ -15,6 +15,7 @@ class PackageModel {
   PackagePositionModel position;
   PackagePersonModel sender;
   PackagePersonModel receiver;
+  String? photo;
 
   PackageModel({
     required this.id,
@@ -26,6 +27,7 @@ class PackageModel {
     required this.position,
     required this.sender,
     required this.receiver,
+    this.photo,
   });
 
   factory PackageModel.fromJson(Map<String, dynamic> json) => _$PackageModelFromJson(json);
@@ -73,4 +75,36 @@ class PackagePersonModel {
   factory PackagePersonModel.fromJson(Map<String, dynamic> json) => _$PackagePersonModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$PackagePersonModelToJson(this);
+}
+
+@CopyWith()
+@JsonSerializable()
+class PackageRouteModel {
+  num distanceMeters;
+  String duration;
+  PackageRoutePolyLineModel polyline;
+
+  PackageRouteModel({
+    required this.distanceMeters,
+    required this.duration,
+    required this.polyline,
+  });
+
+  factory PackageRouteModel.fromJson(Map<String, dynamic> json) => _$PackageRouteModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PackageRouteModelToJson(this);
+}
+
+@CopyWith()
+@JsonSerializable()
+class PackageRoutePolyLineModel {
+  String encodedPolyline;
+
+  PackageRoutePolyLineModel({
+    required this.encodedPolyline,
+  });
+
+  factory PackageRoutePolyLineModel.fromJson(Map<String, dynamic> json) => _$PackageRoutePolyLineModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PackageRoutePolyLineModelToJson(this);
 }

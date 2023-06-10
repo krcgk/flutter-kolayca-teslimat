@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,9 @@ abstract class _PackageStore with Store {
 
   @observable
   List<PackageModel> packages = ObservableList.of([]);
+
+  @observable
+  List<PackageRouteModel> routes = ObservableList.of([]);
 
   @observable
   int? choosedPackageId;
@@ -41,6 +45,40 @@ abstract class _PackageStore with Store {
     int indexOf = packages.indexOf(package!);
 
     packages[indexOf] = newPackage;
+  }
+
+  @action
+  Future<void> complete(
+    XFile file,
+    num latitude,
+    num longitude,
+  ) async {
+    PackageModel newPackage = await packageService.complete(
+      package!.id,
+      file,
+      latitude,
+      longitude,
+    );
+
+    int indexOf = packages.indexOf(package!);
+
+    packages[indexOf] = newPackage;
+  }
+
+  @action
+  Future<void> route(
+    num latitude,
+    num longitude,
+  ) async {
+    try {
+      List<PackageRouteModel> fetchedRoutes = await packageService.routing(latitude, longitude);
+
+      routes.clear();
+      routes.addAll(fetchedRoutes);
+    } catch (err) {
+      print(err);
+      throw Exception('Failed to fetch packages');
+    }
   }
 
   @action

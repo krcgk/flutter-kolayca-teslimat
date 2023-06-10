@@ -33,6 +33,22 @@ mixin _$PackageStore on _PackageStore, Store {
     });
   }
 
+  late final _$routesAtom =
+      Atom(name: '_PackageStore.routes', context: context);
+
+  @override
+  List<PackageRouteModel> get routes {
+    _$routesAtom.reportRead();
+    return super.routes;
+  }
+
+  @override
+  set routes(List<PackageRouteModel> value) {
+    _$routesAtom.reportWrite(value, super.routes, () {
+      super.routes = value;
+    });
+  }
+
   late final _$choosedPackageIdAtom =
       Atom(name: '_PackageStore.choosedPackageId', context: context);
 
@@ -57,6 +73,31 @@ mixin _$PackageStore on _PackageStore, Store {
     return _$fetchPackagesAsyncAction.run(() => super.fetchPackages());
   }
 
+  late final _$moveToCarAsyncAction =
+      AsyncAction('_PackageStore.moveToCar', context: context);
+
+  @override
+  Future<void> moveToCar() {
+    return _$moveToCarAsyncAction.run(() => super.moveToCar());
+  }
+
+  late final _$completeAsyncAction =
+      AsyncAction('_PackageStore.complete', context: context);
+
+  @override
+  Future<void> complete(XFile file, num latitude, num longitude) {
+    return _$completeAsyncAction
+        .run(() => super.complete(file, latitude, longitude));
+  }
+
+  late final _$routeAsyncAction =
+      AsyncAction('_PackageStore.route', context: context);
+
+  @override
+  Future<void> route(num latitude, num longitude) {
+    return _$routeAsyncAction.run(() => super.route(latitude, longitude));
+  }
+
   late final _$_PackageStoreActionController =
       ActionController(name: '_PackageStore', context: context);
 
@@ -75,6 +116,7 @@ mixin _$PackageStore on _PackageStore, Store {
   String toString() {
     return '''
 packages: ${packages},
+routes: ${routes},
 choosedPackageId: ${choosedPackageId},
 package: ${package}
     ''';

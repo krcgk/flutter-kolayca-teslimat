@@ -19,8 +19,9 @@ dependencies:
   provider: ^6.0.5
   dio: ^5.1.2
   copy_with_extension: ^5.0.2
-  camera: ^0.10.5+2
+  camera: ^0.10.2+1
   google_maps_flutter: ^2.2.8
+  location: ^4.4.0
 
 dev_dependencies:
   flutter_test:

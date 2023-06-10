@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:kolaycateslimat/models/package_model.dart';
@@ -6,6 +7,7 @@ import 'package:kolaycateslimat/stores/auth_store.dart';
 import 'package:kolaycateslimat/stores/package_store.dart';
 import 'package:kolaycateslimat/stores/root_store.dart';
 import 'package:kolaycateslimat/widgets/take_photo_page.dart';
+import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 
 class PackagePage extends StatefulWidget {
@@ -246,11 +248,18 @@ class _PackagePageState extends State<PackagePage> {
           child: ElevatedButton(
             child: Text('Teslim Et'),
             onPressed: () async {
-              Navigator.of(context).push(
+              var photoPageResult = await Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (BuildContext context) => TakePhotoPage(),
                 ),
               );
+
+              if (photoPageResult is XFile) {
+                LocationData? locationData = await fetchMyLocation();
+                if (locationData != null) {
+                  await _packageStore.complete(photoPageResult, locationData.latitude!, locationData.longitude!);
+                } else {}
+              }
             },
           ),
         );
@@ -258,5 +267,35 @@ class _PackagePageState extends State<PackagePage> {
 
       return SizedBox.shrink();
     });
+  }
+
+  Future<LocationData?> fetchMyLocation() async {
+    try {
+      Location location = new Location();
+
+      bool _serviceEnabled;
+      PermissionStatus _permissionGranted;
+      LocationData _locationData;
+
+      _serviceEnabled = await location.serviceEnabled();
+      if (!_serviceEnabled) {
+        _serviceEnabled = await location.requestService();
+        if (!_serviceEnabled) {
+          return null;
+        }
+      }
+
+      _permissionGranted = await location.hasPermission();
+      if (_permissionGranted == PermissionStatus.denied) {
+        _permissionGranted = await location.requestPermission();
+        if (_permissionGranted != PermissionStatus.granted) {
+          return null;
+        }
+      }
+
+      return _locationData = await location.getLocation();
+    } catch (err) {
+      rethrow;
+    }
   }
 }

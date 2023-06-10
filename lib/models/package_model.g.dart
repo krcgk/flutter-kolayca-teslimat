@@ -25,6 +25,8 @@ abstract class _$PackageModelCWProxy {
 
   PackageModel receiver(PackagePersonModel receiver);
 
+  PackageModel photo(String? photo);
+
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `PackageModel(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
   /// Usage
@@ -41,6 +43,7 @@ abstract class _$PackageModelCWProxy {
     PackagePositionModel? position,
     PackagePersonModel? sender,
     PackagePersonModel? receiver,
+    String? photo,
   });
 }
 
@@ -82,6 +85,9 @@ class _$PackageModelCWProxyImpl implements _$PackageModelCWProxy {
       this(receiver: receiver);
 
   @override
+  PackageModel photo(String? photo) => this(photo: photo);
+
+  @override
 
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `PackageModel(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
@@ -99,6 +105,7 @@ class _$PackageModelCWProxyImpl implements _$PackageModelCWProxy {
     Object? position = const $CopyWithPlaceholder(),
     Object? sender = const $CopyWithPlaceholder(),
     Object? receiver = const $CopyWithPlaceholder(),
+    Object? photo = const $CopyWithPlaceholder(),
   }) {
     return PackageModel(
       id: id == const $CopyWithPlaceholder() || id == null
@@ -138,6 +145,10 @@ class _$PackageModelCWProxyImpl implements _$PackageModelCWProxy {
           ? _value.receiver
           // ignore: cast_nullable_to_non_nullable
           : receiver as PackagePersonModel,
+      photo: photo == const $CopyWithPlaceholder()
+          ? _value.photo
+          // ignore: cast_nullable_to_non_nullable
+          : photo as String?,
     );
   }
 }
@@ -331,6 +342,134 @@ extension $PackagePersonModelCopyWith on PackagePersonModel {
       _$PackagePersonModelCWProxyImpl(this);
 }
 
+abstract class _$PackageRouteModelCWProxy {
+  PackageRouteModel distanceMeters(num distanceMeters);
+
+  PackageRouteModel duration(String duration);
+
+  PackageRouteModel polyline(PackageRoutePolyLineModel polyline);
+
+  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `PackageRouteModel(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  ///
+  /// Usage
+  /// ```dart
+  /// PackageRouteModel(...).copyWith(id: 12, name: "My name")
+  /// ````
+  PackageRouteModel call({
+    num? distanceMeters,
+    String? duration,
+    PackageRoutePolyLineModel? polyline,
+  });
+}
+
+/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfPackageRouteModel.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfPackageRouteModel.copyWith.fieldName(...)`
+class _$PackageRouteModelCWProxyImpl implements _$PackageRouteModelCWProxy {
+  const _$PackageRouteModelCWProxyImpl(this._value);
+
+  final PackageRouteModel _value;
+
+  @override
+  PackageRouteModel distanceMeters(num distanceMeters) =>
+      this(distanceMeters: distanceMeters);
+
+  @override
+  PackageRouteModel duration(String duration) => this(duration: duration);
+
+  @override
+  PackageRouteModel polyline(PackageRoutePolyLineModel polyline) =>
+      this(polyline: polyline);
+
+  @override
+
+  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `PackageRouteModel(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  ///
+  /// Usage
+  /// ```dart
+  /// PackageRouteModel(...).copyWith(id: 12, name: "My name")
+  /// ````
+  PackageRouteModel call({
+    Object? distanceMeters = const $CopyWithPlaceholder(),
+    Object? duration = const $CopyWithPlaceholder(),
+    Object? polyline = const $CopyWithPlaceholder(),
+  }) {
+    return PackageRouteModel(
+      distanceMeters: distanceMeters == const $CopyWithPlaceholder() ||
+              distanceMeters == null
+          ? _value.distanceMeters
+          // ignore: cast_nullable_to_non_nullable
+          : distanceMeters as num,
+      duration: duration == const $CopyWithPlaceholder() || duration == null
+          ? _value.duration
+          // ignore: cast_nullable_to_non_nullable
+          : duration as String,
+      polyline: polyline == const $CopyWithPlaceholder() || polyline == null
+          ? _value.polyline
+          // ignore: cast_nullable_to_non_nullable
+          : polyline as PackageRoutePolyLineModel,
+    );
+  }
+}
+
+extension $PackageRouteModelCopyWith on PackageRouteModel {
+  /// Returns a callable class that can be used as follows: `instanceOfPackageRouteModel.copyWith(...)` or like so:`instanceOfPackageRouteModel.copyWith.fieldName(...)`.
+  // ignore: library_private_types_in_public_api
+  _$PackageRouteModelCWProxy get copyWith =>
+      _$PackageRouteModelCWProxyImpl(this);
+}
+
+abstract class _$PackageRoutePolyLineModelCWProxy {
+  PackageRoutePolyLineModel encodedPolyline(String encodedPolyline);
+
+  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `PackageRoutePolyLineModel(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  ///
+  /// Usage
+  /// ```dart
+  /// PackageRoutePolyLineModel(...).copyWith(id: 12, name: "My name")
+  /// ````
+  PackageRoutePolyLineModel call({
+    String? encodedPolyline,
+  });
+}
+
+/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfPackageRoutePolyLineModel.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfPackageRoutePolyLineModel.copyWith.fieldName(...)`
+class _$PackageRoutePolyLineModelCWProxyImpl
+    implements _$PackageRoutePolyLineModelCWProxy {
+  const _$PackageRoutePolyLineModelCWProxyImpl(this._value);
+
+  final PackageRoutePolyLineModel _value;
+
+  @override
+  PackageRoutePolyLineModel encodedPolyline(String encodedPolyline) =>
+      this(encodedPolyline: encodedPolyline);
+
+  @override
+
+  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `PackageRoutePolyLineModel(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  ///
+  /// Usage
+  /// ```dart
+  /// PackageRoutePolyLineModel(...).copyWith(id: 12, name: "My name")
+  /// ````
+  PackageRoutePolyLineModel call({
+    Object? encodedPolyline = const $CopyWithPlaceholder(),
+  }) {
+    return PackageRoutePolyLineModel(
+      encodedPolyline: encodedPolyline == const $CopyWithPlaceholder() ||
+              encodedPolyline == null
+          ? _value.encodedPolyline
+          // ignore: cast_nullable_to_non_nullable
+          : encodedPolyline as String,
+    );
+  }
+}
+
+extension $PackageRoutePolyLineModelCopyWith on PackageRoutePolyLineModel {
+  /// Returns a callable class that can be used as follows: `instanceOfPackageRoutePolyLineModel.copyWith(...)` or like so:`instanceOfPackageRoutePolyLineModel.copyWith.fieldName(...)`.
+  // ignore: library_private_types_in_public_api
+  _$PackageRoutePolyLineModelCWProxy get copyWith =>
+      _$PackageRoutePolyLineModelCWProxyImpl(this);
+}
+
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
@@ -348,6 +487,7 @@ PackageModel _$PackageModelFromJson(Map<String, dynamic> json) => PackageModel(
           PackagePersonModel.fromJson(json['sender'] as Map<String, dynamic>),
       receiver:
           PackagePersonModel.fromJson(json['receiver'] as Map<String, dynamic>),
+      photo: json['photo'] as String?,
     );
 
 Map<String, dynamic> _$PackageModelToJson(PackageModel instance) =>
@@ -361,6 +501,7 @@ Map<String, dynamic> _$PackageModelToJson(PackageModel instance) =>
       'position': instance.position,
       'sender': instance.sender,
       'receiver': instance.receiver,
+      'photo': instance.photo,
     };
 
 PackagePositionModel _$PackagePositionModelFromJson(
@@ -397,4 +538,31 @@ Map<String, dynamic> _$PackagePersonModelToJson(PackagePersonModel instance) =>
       'district': instance.district,
       'address': instance.address,
       'postalCode': instance.postalCode,
+    };
+
+PackageRouteModel _$PackageRouteModelFromJson(Map<String, dynamic> json) =>
+    PackageRouteModel(
+      distanceMeters: json['distanceMeters'] as num,
+      duration: json['duration'] as String,
+      polyline: PackageRoutePolyLineModel.fromJson(
+          json['polyline'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$PackageRouteModelToJson(PackageRouteModel instance) =>
+    <String, dynamic>{
+      'distanceMeters': instance.distanceMeters,
+      'duration': instance.duration,
+      'polyline': instance.polyline,
+    };
+
+PackageRoutePolyLineModel _$PackageRoutePolyLineModelFromJson(
+        Map<String, dynamic> json) =>
+    PackageRoutePolyLineModel(
+      encodedPolyline: json['encodedPolyline'] as String,
+    );
+
+Map<String, dynamic> _$PackageRoutePolyLineModelToJson(
+        PackageRoutePolyLineModel instance) =>
+    <String, dynamic>{
+      'encodedPolyline': instance.encodedPolyline,
     };
